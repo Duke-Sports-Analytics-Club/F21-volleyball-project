@@ -1,7 +1,18 @@
-# Fall 21 Volleyball Project
+# Fall 2021 Volleyball Project
 
 **Date**: 2021 Fall ~ 2022 Spring<br>
 **Documents**: [Google Docs](https://docs.google.com/document/d/1FT1GLgJ2wC0Wx0aJGSr3TNlLg7V-6a3f2lLjZIBOd8M/edit?usp=sharing)
+
+## Members
+
+Project Leaders:
+- Hillary Lee
+- Angel Chaudhary
+
+Project Members:
+- Aditya Sardesai
+- Ethan Ouellette
+- Ashrit Verma
 
 ## Objectives
 
