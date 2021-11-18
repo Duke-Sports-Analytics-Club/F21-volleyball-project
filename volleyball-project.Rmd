@@ -1,0 +1,43 @@
+---
+title: "Duke Sports Analtyics: Volleyball Project (Fall 2021)"
+description: |
+  Exploring Duke Women's Volleyball statistics
+author: Hillary Lee, Angel Chaudhary, Aditya Sardesai, Ethan Ouellette, Ashrit Verma
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
+                      comment = NA)
+```
+
+# Scraping Data
+
+Volleyball is heavily underdeveloped in terms of sports-statistics, which has
+prompted us to start this project that aims to develop a WAR-like metric for
+volleyball based on statistics from Duke Women's Volleyball for seasons
+2018~2021. It will provide a comprehensive and hollistic approach in evaluating
+players' strength and performance.
+
+```{r packages}
+library(tidyverse)
+```
+
+The data is scraped from Duke Sport's website: https://goduke.com/sports/vb/stats/2021?path=vb.
+
+```{r read-data}
+ex_data <- read_html("https://goduke.com/sports/vb/stats/2021?path=vb")
+player <- ex_data %>%
+  html_nodes(".hide-on-medium-down") %>% 
+  html_text()
+
+stat <- ex_data %>%
+  html_nodes(".text-center") %>%
+  html_text()
+```
+
+# Analysis
+
+# Data Visualization
+
+# Summary
