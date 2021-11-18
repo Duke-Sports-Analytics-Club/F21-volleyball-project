@@ -23,4 +23,5 @@ Project Members:
 
 ## Sources
 1. Duke Sports - [2021 Volleyball Cumulative Statistics](https://goduke.com/sports/vb/stats/2021?path=vb)
-2. FIVB - [Volleyball Information System](http://www.fivb.org/en/volleyball/vis.asp)
+2. NCAA - [Women's Volleyball Division I](https://www.ncaa.com/sports/volleyball-women/d1)
+3. FIVB - [Volleyball Information System](http://www.fivb.org/en/volleyball/vis.asp)

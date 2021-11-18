@@ -28,6 +28,8 @@ library(tidyverse)
 
 The data is scraped from Duke Sport's website: https://goduke.com/sports/vb/stats/2021?path=vb.
 
+## Team
+
 ```{r read-data}
 url <- "https://goduke.com/sports/vb/stats/2021?path=vb"
 
@@ -43,13 +45,35 @@ Team_data
 This is an explanation of the data provided on the Duke website based on the
 FIVB VIS (Volleyball Information System):
 
-| Statistic        | Description (FIVB VIS)                                                 |
-|------------------|------------------------------------------------------------------------|
-| Kills or Spikes  | Number of scoring attacks.                                             |
-| Errors or Faults | Number of attacking errors. The opponent scores directly.              |
-| Attempts         | The total number of attacks.                                           |
-| Percent          | Percentage of kills out of attempts. Kills / Attempts                  |
-| Kills Per Set    | Average number of scoring attacks for each set. Kills / Number of Sets |
+| ATTACK           | Description                                               |
+|------------------|-----------------------------------------------------------|
+| Kills or Spikes  | Number of scoring attacks.                                |
+| Errors or Faults | Number of attacking errors. The opponent scores directly. |
+| Attempts         | Total number of attacks.                                  |
+| Percent          | Percentage of kills out of attempts.                      |
+| Kills Per Set    | Average number of scoring attacks per set.                |
+
+| SET                  | Description                                                  |
+|----------------------|--------------------------------------------------------------|
+| Assists              | Number of set assists.                                       |
+| Assists Per Set      | Number of set assists per set.                               |
+| Ball Handling Errors | Number of mistakes in setting. The opponent scores directly. |
+
+| SERVE        | Description                                      |
+|--------------|--------------------------------------------------|
+| Aces         | Number of points directly scored by the service. |
+| Errors       | Number of service mistakes.                      |
+| Aces Per Set | Average number of serve aces per set.            |
+
+| RECEPTIONS     | Description                                 |
+|----------------|---------------------------------------------|
+| Errors         | Number of reception errors.                 |
+| Errors Per Set | Average number of reception errors per set. |
+
+| DEFENSE      | Description                     |
+|--------------|---------------------------------|
+| Digs         | Number of outstanding digs.     |
+| Digs Per Set | Average number of digs per set. |
 
 # Analysis
 
