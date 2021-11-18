@@ -8,10 +8,11 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
-                      comment = NA)
+                      comment = NA, tidy = "styler",
+                      fig.width = 8, fig.height = 5)
 ```
 
-# Scraping Data
+# Introduction
 
 Volleyball is heavily underdeveloped in terms of sports-statistics, which has
 prompted us to start this project that aims to develop a WAR-like metric for
@@ -19,22 +20,36 @@ volleyball based on statistics from Duke Women's Volleyball for seasons
 2018~2021. It will provide a comprehensive and hollistic approach in evaluating
 players' strength and performance.
 
-```{r packages}
+# Scraping Data
+
+```{r packages, message = FALSE}
 library(tidyverse)
 ```
 
 The data is scraped from Duke Sport's website: https://goduke.com/sports/vb/stats/2021?path=vb.
 
 ```{r read-data}
-ex_data <- read_html("https://goduke.com/sports/vb/stats/2021?path=vb")
-player <- ex_data %>%
-  html_nodes(".hide-on-medium-down") %>% 
-  html_text()
+url <- "https://goduke.com/sports/vb/stats/2021?path=vb"
 
-stat <- ex_data %>%
-  html_nodes(".text-center") %>%
-  html_text()
+Team_data <- xml2::read_html(url) %>% 
+  rvest::html_table(fill = T) %>% 
+  purrr::pluck(1) %>% 
+  janitor::clean_names() %>% 
+  dplyr::as_tibble()
+
+Team_data
 ```
+
+This is an explanation of the data provided on the Duke website based on the
+FIVB VIS (Volleyball Information System):
+
+| Statistic        | Description (FIVB VIS)                                                 |
+|------------------|------------------------------------------------------------------------|
+| Kills or Spikes  | Number of scoring attacks.                                             |
+| Errors or Faults | Number of attacking errors. The opponent scores directly.              |
+| Attempts         | The total number of attacks.                                           |
+| Percent          | Percentage of kills out of attempts. Kills / Attempts                  |
+| Kills Per Set    | Average number of scoring attacks for each set. Kills / Number of Sets |
 
 # Analysis
 
