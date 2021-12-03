@@ -20,28 +20,6 @@ volleyball based on statistics from Duke Women's Volleyball for seasons
 2018~2021. It will provide a comprehensive and hollistic approach in evaluating
 players' strength and performance.
 
-# Scraping Data
-
-```{r packages, message = FALSE}
-library(tidyverse)
-```
-
-The data is scraped from Duke Sport's website: https://goduke.com/sports/vb/stats/2021?path=vb.
-
-## Team
-
-```{r read-data}
-url <- "https://goduke.com/sports/vb/stats/2021?path=vb"
-
-Team_data <- xml2::read_html(url) %>% 
-  rvest::html_table(fill = T) %>% 
-  purrr::pluck(1) %>% 
-  janitor::clean_names() %>% 
-  dplyr::as_tibble()
-
-Team_data
-```
-
 This is an explanation of the data provided on the Duke website based on the
 FIVB VIS (Volleyball Information System):
 
@@ -74,6 +52,28 @@ FIVB VIS (Volleyball Information System):
 |--------------|---------------------------------|
 | Digs         | Number of outstanding digs.     |
 | Digs Per Set | Average number of digs per set. |
+
+# Scraping Data
+
+```{r packages, message = FALSE}
+library(tidyverse)
+```
+
+The data is scraped from Duke Sport's website: https://goduke.com/sports/vb/stats/2021?path=vb.
+
+## Team Data
+
+```{r read-data}
+url <- "https://goduke.com/sports/vb/stats/2021?path=vb"
+
+Team_data <- xml2::read_html(url) %>% 
+  rvest::html_table(fill = T) %>% 
+  purrr::pluck(1) %>% 
+  janitor::clean_names() %>% 
+  dplyr::as_tibble()
+
+Team_data
+```
 
 # Analysis
 
