@@ -75,6 +75,18 @@ Team_data <- xml2::read_html(url) %>%
 Team_data
 ```
 
+```{r read 2020 data}
+url <- "https://goduke.com/sports/womens-volleyball/stats/2020"
+
+Team_data_2020 <- xml2::read_html(url) %>% 
+  rvest::html_table(fill = T) %>% 
+  purrr::pluck(1) %>% 
+  janitor::clean_names() %>% 
+  dplyr::as_tibble()
+
+Team_data_2020
+```
+
 # Analysis
 
 # Data Visualization
