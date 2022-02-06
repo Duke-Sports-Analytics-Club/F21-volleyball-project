@@ -61,30 +61,78 @@ library(tidyverse)
 
 The data is scraped from Duke Sport's website: https://goduke.com/sports/vb/stats/2021?path=vb.
 
-## Team Data
+## Duke Data
 
-```{r read-data}
+```{r read-duke-data}
 url <- "https://goduke.com/sports/vb/stats/2021?path=vb"
-
-Team_data <- xml2::read_html(url) %>% 
+Team_data_2021 <- xml2::read_html(url) %>% 
   rvest::html_table(fill = T) %>% 
   purrr::pluck(1) %>% 
   janitor::clean_names() %>% 
   dplyr::as_tibble()
 
-Team_data
-```
-
-```{r read 2020 data}
 url <- "https://goduke.com/sports/womens-volleyball/stats/2020"
-
 Team_data_2020 <- xml2::read_html(url) %>% 
   rvest::html_table(fill = T) %>% 
   purrr::pluck(1) %>% 
   janitor::clean_names() %>% 
   dplyr::as_tibble()
 
+url <- "https://goduke.com/sports/womens-volleyball/stats/2020"
+Team_data_2019 <- xml2::read_html(url) %>% 
+  rvest::html_table(fill = T) %>% 
+  purrr::pluck(1) %>% 
+  janitor::clean_names() %>% 
+  dplyr::as_tibble()
+
+Team_data_2021
 Team_data_2020
+Team_data_2019
+```
+
+## NCAA Data
+
+```{r read-ncaa-data}
+url <- "https://www.ncaa.com/stats/volleyball-women/d1/current/team/48"
+NCAA_aces_per_set <- xml2::read_html(url) %>% 
+  rvest::html_table(fill = T) %>% 
+  purrr::pluck(1) %>% 
+  janitor::clean_names() %>% 
+  dplyr::as_tibble()
+
+url <- "https://www.ncaa.com/stats/volleyball-women/d1/current/team/49"
+NCAA_blocks_per_set <- xml2::read_html(url) %>% 
+  rvest::html_table(fill = T) %>% 
+  purrr::pluck(1) %>% 
+  janitor::clean_names() %>% 
+  dplyr::as_tibble()
+
+url <- "https://www.ncaa.com/stats/volleyball-women/d1/current/team/50"
+NCAA_digs_per_set <- xml2::read_html(url) %>% 
+  rvest::html_table(fill = T) %>% 
+  purrr::pluck(1) %>% 
+  janitor::clean_names() %>% 
+  dplyr::as_tibble()
+
+url <- "https://www.ncaa.com/stats/volleyball-women/d1/current/team/46"
+NCAA_kills_per_set <- xml2::read_html(url) %>% 
+  rvest::html_table(fill = T) %>% 
+  purrr::pluck(1) %>% 
+  janitor::clean_names() %>% 
+  dplyr::as_tibble()
+
+url <- "https://www.ncaa.com/stats/volleyball-women/d1/current/team/45"
+NCAA_hitting_percentage <- xml2::read_html(url) %>% 
+  rvest::html_table(fill = T) %>% 
+  purrr::pluck(1) %>% 
+  janitor::clean_names() %>% 
+  dplyr::as_tibble()
+
+NCAA_aces_per_set
+NCAA_blocks_per_set
+NCAA_digs_per_set
+NCAA_kills_per_set
+NCAA_hitting_percentage
 ```
 
 # Analysis
