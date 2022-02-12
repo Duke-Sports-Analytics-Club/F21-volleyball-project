@@ -69,25 +69,31 @@ Team_data_2021 <- xml2::read_html(url) %>%
   rvest::html_table(fill = T) %>% 
   purrr::pluck(1) %>% 
   janitor::clean_names() %>% 
-  dplyr::as_tibble()
+  dplyr::as_tibble() %>% 
+  select(-opponents_opp) %>% 
+  rename("2021" = duke)
 
 url <- "https://goduke.com/sports/womens-volleyball/stats/2020"
 Team_data_2020 <- xml2::read_html(url) %>% 
   rvest::html_table(fill = T) %>% 
   purrr::pluck(1) %>% 
   janitor::clean_names() %>% 
-  dplyr::as_tibble()
+  dplyr::as_tibble() %>% 
+  select(-opponents_opp) %>% 
+  rename("2020" = duke)
 
-url <- "https://goduke.com/sports/womens-volleyball/stats/2020"
+url <- "https://goduke.com/sports/womens-volleyball/stats/2019"
 Team_data_2019 <- xml2::read_html(url) %>% 
   rvest::html_table(fill = T) %>% 
   purrr::pluck(1) %>% 
   janitor::clean_names() %>% 
-  dplyr::as_tibble()
+  dplyr::as_tibble() %>% 
+  select(-opponents_opp) %>% 
+  rename("2019" = duke)
 
-Team_data_2021
-Team_data_2020
-Team_data_2019
+Team_data_compiled <- left_join(left_join(Team_data_2021, Team_data_2020), Team_data_2019)
+
+Team_data_compiled
 ```
 
 ## NCAA Data
@@ -114,6 +120,14 @@ NCAA_digs_per_set <- xml2::read_html(url) %>%
   janitor::clean_names() %>% 
   dplyr::as_tibble()
 
+
+url <- "https://www.ncaa.com/stats/volleyball-women/d1/current/team/47"
+NCAA_assists_per_set <- xml2::read_html(url) %>% 
+  rvest::html_table(fill = T) %>% 
+  purrr::pluck(1) %>% 
+  janitor::clean_names() %>% 
+  dplyr::as_tibble()
+
 url <- "https://www.ncaa.com/stats/volleyball-women/d1/current/team/46"
 NCAA_kills_per_set <- xml2::read_html(url) %>% 
   rvest::html_table(fill = T) %>% 
@@ -131,6 +145,7 @@ NCAA_hitting_percentage <- xml2::read_html(url) %>%
 NCAA_aces_per_set
 NCAA_blocks_per_set
 NCAA_digs_per_set
+NCAA_assists_per_set
 NCAA_kills_per_set
 NCAA_hitting_percentage
 ```
