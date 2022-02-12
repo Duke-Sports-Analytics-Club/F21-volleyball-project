@@ -6,19 +6,16 @@
 ## Members
 
 Project Leaders:
-- Hillary Lee
-- Angel Chaudhary
+- [Hillary Lee](https://github.com/hillarylee)
 
 Project Members:
-- Aditya Sardesai
-- Ethan Ouellette
-- Ashrit Verma
+- [Aditya Sardesai](https://github.com/aditsard3)
+- [Ethan Ouellette](https://github.com/Ethan-Ouellette)
 
 ## Objectives
 
-- Analyze cumulative statistics for Duke Women's Volleyball Team for seasons 2018~2021
-- Conduct statistical analysis based on different skill sets for positions
-- Develop a WAR-like metric for volleyball
+- Analyze statistics for Duke Women's Volleyball Team for seasons 2019~2021
+- Make a comparison between Duke and NCAA Top 50 Teams
 - Provide a comprehensive and holistic approach to analyze individual player performance
 
 ## Sources
