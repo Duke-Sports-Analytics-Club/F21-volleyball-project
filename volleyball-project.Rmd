@@ -150,9 +150,21 @@ NCAA_kills_per_set
 NCAA_hitting_percentage
 ```
 
+```{r nitty-gritty}
+library(readxl)
+nitty_gritties <- read_excel("data/nitty_gritties.xlsx")
+View(nitty_gritties)
+```
+
+This data shows the RPI (rating percentage index) data for the AAC conference, 
+where Duke currently ranks 62nd in. The RPI is a quantity used to rank sports 
+teams based upon a team's wins and losses and its strength of schedule.
+
 # Analysis
 
 This section will be an analysis.
+
+
 
 # Data Visualization
 
