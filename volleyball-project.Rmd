@@ -167,5 +167,3 @@ teams based upon a team's wins and losses and its strength of schedule.
 This section will be an analysis.
 
 # Summary
-
-# This is a test a
