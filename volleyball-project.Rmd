@@ -154,6 +154,9 @@ NCAA_hitting_percentage
 library(readxl)
 nitty_gritties <- read_excel("data/nitty_gritties.xlsx")
 nitty_gritties
+
+full_nitty_gritties <- read_excel("data/NCAA_Statistics.xlsx")
+full_nitty_gritties
 ```
 
 This data shows the RPI (rating percentage index) data for the AAC conference, 
@@ -162,8 +165,23 @@ teams based upon a team's wins and losses and its strength of schedule.
 
 # Data Visualization
 
+# Plotting hitting % vs. win %
+```{r}
+library(ggplot2)
+lookup <- full_nitty_gritties[ ,c("Team", "Adj. RPI Value")]
+hitting_pct <- NCAA_hitting_percentage[, c("team", "pct")]
+hitting_pct_rpi <- merge(lookup, hitting_pct, by.x="Team", by.y="team")
+names(hitting_pct_rpi)[2] <- "rpi"
+
+ggplot2(hitting_pct_rpi, aes(pct, rpi)) + geom_point()
+
+```
+
+
+
 # Analysis
 
 This section will be an analysis.
 
 # Summary
+
