@@ -104,7 +104,8 @@ NCAA_aces_per_set <- xml2::read_html(url) %>%
   rvest::html_table(fill = T) %>% 
   purrr::pluck(1) %>% 
   janitor::clean_names() %>% 
-  dplyr::as_tibble()
+  dplyr::as_tibble() %>% 
+  rename(per_set = )
 
 url <- "https://www.ncaa.com/stats/volleyball-women/d1/current/team/49"
 NCAA_blocks_per_set <- xml2::read_html(url) %>% 
@@ -119,7 +120,6 @@ NCAA_digs_per_set <- xml2::read_html(url) %>%
   purrr::pluck(1) %>% 
   janitor::clean_names() %>% 
   dplyr::as_tibble()
-
 
 url <- "https://www.ncaa.com/stats/volleyball-women/d1/current/team/47"
 NCAA_assists_per_set <- xml2::read_html(url) %>% 
@@ -174,10 +174,24 @@ hitting_pct_rpi <- merge(lookup, hitting_pct, by.x="Team", by.y="team")
 names(hitting_pct_rpi)[2] <- "rpi"
 
 ggplot2(hitting_pct_rpi, aes(pct, rpi)) + geom_point()
-
 ```
 
+# Offense and Defense stats
 
+```{r offense}
+NCAA_aces_per_set %>% 
+  inner_join(NCAA_kills_per_set, by = "team") 
+```
+
+Service aces, kills, and hitting percentage are offensive stats that are compiled.
+
+
+```{r defense}
+NCAA_blocks_per_set %>% 
+  inner_join(NCAA_digs_per_set, by = "team") 
+```
+
+Blocks and digs are defensive stats that are compiled.
 
 # Analysis
 
