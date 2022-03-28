@@ -193,6 +193,21 @@ NCAA_blocks_per_set %>%
 
 Blocks and digs are defensive stats that are compiled.
 
+```{r linear model}
+ncaa_and_nitty <- left_join(full_nitty_gritties, NCAA_assists_per_set, 
+                             by = c("Team" = "team")) %>%
+  left_join(NCAA_aces_per_set, by = c("Team" = "team")) %>%
+  left_join(NCAA_blocks_per_set, by = c("Team" = "team")) %>%
+  left_join(NCAA_digs_per_set, by = c("Team" = "team")) %>%
+  left_join(NCAA_hitting_percentage, by = c("Team" = "team")) %>%
+  left_join(NCAA_kills_per_set, by = c("Team" = "team"))
+
+rpi_lm <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(Adj. RPI Value ~ per_set, data = ncaa_and_nitty)
+```
+
+
 # Analysis
 
 This section will be an analysis.
