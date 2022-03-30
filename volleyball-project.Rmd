@@ -184,16 +184,23 @@ ggplot(data = hitting_pct_rpi, mapping = aes(x = pct, y = rpi)) +
 # Offense and Defense stats
 
 ```{r offense}
+df1 <- NCAA_kills_per_set %>% select(-c(s, rank))
+
 NCAA_aces_per_set %>% 
-  inner_join(NCAA_kills_per_set, by = "team") 
+  inner_join(df1, by = "team") %>% 
+  rename("aces per set" = per_set.x,
+         "kills per set" = per_set.y)
 ```
 
 Service aces, kills, and hitting percentage are offensive stats that are compiled.
 
-
 ```{r defense}
+df2 <- NCAA_digs_per_set %>% select(-c(s, rank))
+
 NCAA_blocks_per_set %>% 
-  inner_join(NCAA_digs_per_set, by = "team") 
+  inner_join(df2, by = "team") %>% 
+  rename("blocks per set" = per_set.x,
+         "digs per set" = per_set.y)
 ```
 
 Blocks and digs are defensive stats that are compiled.
