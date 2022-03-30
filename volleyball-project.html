@@ -173,34 +173,6 @@ pre code {
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
 <p>Volleyball is heavily underdeveloped in terms of sports-statistics, which has prompted us to start this project that aims to develop a WAR-like metric for volleyball based on statistics from Duke Women’s Volleyball for seasons 2018~2021. It will provide a comprehensive and hollistic approach in evaluating players’ strength and performance.</p>
-</div>
-<div id="scraping-data" class="section level1">
-<h1>Scraping Data</h1>
-<pre class="r"><code>library(tidyverse)</code></pre>
-<p>The data is scraped from Duke Sport’s website: <a href="https://goduke.com/sports/vb/stats/2021?path=vb" class="uri">https://goduke.com/sports/vb/stats/2021?path=vb</a>.</p>
-<pre class="r"><code>url &lt;- &quot;https://goduke.com/sports/vb/stats/2021?path=vb&quot;
-
-Team_data &lt;- xml2::read_html(url) %&gt;% 
-  rvest::html_table(fill = T) %&gt;% 
-  purrr::pluck(1) %&gt;% 
-  janitor::clean_names() %&gt;% 
-  dplyr::as_tibble()
-
-Team_data</code></pre>
-<pre><code># A tibble: 26 × 3
-   statistic                                                 duke   opponents_opp
-   &lt;chr&gt;                                                     &lt;chr&gt;  &lt;chr&gt;        
- 1 &quot;Attack&quot;                                                  Attack Attack       
- 2 &quot;Kills\r\n                            K&quot;                  1097   1068         
- 3 &quot;Errors\r\n                            ATE&quot;               435    462          
- 4 &quot;Attempts\r\n                            ATT&quot;             3043   3014         
- 5 &quot;Percent\r\n                            ATT%&quot;             .218   .201         
- 6 &quot;Kills Per Set\r\n                            K/S&quot;        12.2   11.9         
- 7 &quot;Set&quot;                                                     Set    Set          
- 8 &quot;Assists\r\n                            AST&quot;              976    943          
- 9 &quot;Assists Per Set\r\n                            AST/S&quot;    10.8   10.5         
-10 &quot;Ball Handling Errors\r\n                            BHE&quot; 27     22           
-# … with 16 more rows</code></pre>
 <p>This is an explanation of the data provided on the Duke website based on the FIVB VIS (Volleyball Information System):</p>
 <table>
 <colgroup>
@@ -209,8 +181,8 @@ Team_data</code></pre>
 </colgroup>
 <thead>
 <tr class="header">
-<th>Statistic</th>
-<th>Description (FIVB VIS)</th>
+<th>ATTACK</th>
+<th>Description</th>
 </tr>
 </thead>
 <tbody>
@@ -228,14 +200,129 @@ Team_data</code></pre>
 </tr>
 <tr class="even">
 <td>Percent</td>
-<td>Percentage of kills out of attempts. <br> Kills / Attempts</td>
+<td>Percentage of kills out of attempts.</td>
 </tr>
 <tr class="odd">
 <td>Kills Per Set</td>
-<td>Average number of scoring attacks for each set. <br> Kills / Number of Sets</td>
+<td>Average number of scoring attacks per set.</td>
 </tr>
 </tbody>
 </table>
+<table>
+<colgroup>
+<col width="26%" />
+<col width="73%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>SET</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Assists</td>
+<td>Number of set assists.</td>
+</tr>
+<tr class="even">
+<td>Assists Per Set</td>
+<td>Number of set assists per set.</td>
+</tr>
+<tr class="odd">
+<td>Ball Handling Errors</td>
+<td>Number of mistakes in setting. The opponent scores directly.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>SERVE</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Aces</td>
+<td>Number of points directly scored by the service.</td>
+</tr>
+<tr class="even">
+<td>Errors</td>
+<td>Number of service mistakes.</td>
+</tr>
+<tr class="odd">
+<td>Aces Per Set</td>
+<td>Average number of serve aces per set.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>RECEPTIONS</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Errors</td>
+<td>Number of reception errors.</td>
+</tr>
+<tr class="even">
+<td>Errors Per Set</td>
+<td>Average number of reception errors per set.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>DEFENSE</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Digs</td>
+<td>Number of outstanding digs.</td>
+</tr>
+<tr class="even">
+<td>Digs Per Set</td>
+<td>Average number of digs per set.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="scraping-data" class="section level1">
+<h1>Scraping Data</h1>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<p>The data is scraped from Duke Sport’s website: <a href="https://goduke.com/sports/vb/stats/2021?path=vb" class="uri">https://goduke.com/sports/vb/stats/2021?path=vb</a>.</p>
+<div id="team-data" class="section level2">
+<h2>Team Data</h2>
+<pre class="r"><code>url &lt;- &quot;https://goduke.com/sports/vb/stats/2021?path=vb&quot;
+
+Team_data &lt;- xml2::read_html(url) %&gt;% 
+  rvest::html_table(fill = T) %&gt;% 
+  purrr::pluck(1) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  dplyr::as_tibble()
+
+Team_data</code></pre>
+<pre><code># A tibble: 26 × 3
+   statistic                                                 duke   opponents_opp
+   &lt;chr&gt;                                                     &lt;chr&gt;  &lt;chr&gt;        
+ 1 &quot;Attack&quot;                                                  Attack Attack       
+ 2 &quot;Kills\r\n                            K&quot;                  1236   1215         
+ 3 &quot;Errors\r\n                            ATE&quot;               496    513          
+ 4 &quot;Attempts\r\n                            ATT&quot;             3445   3376         
+ 5 &quot;Percent\r\n                            ATT%&quot;             .215   .208         
+ 6 &quot;Kills Per Set\r\n                            K/S&quot;        12.1   11.9         
+ 7 &quot;Set&quot;                                                     Set    Set          
+ 8 &quot;Assists\r\n                            AST&quot;              1101   1078         
+ 9 &quot;Assists Per Set\r\n                            AST/S&quot;    10.8   10.6         
+10 &quot;Ball Handling Errors\r\n                            BHE&quot; 31     28           
+# … with 16 more rows</code></pre>
+</div>
 </div>
 <div id="analysis" class="section level1">
 <h1>Analysis</h1>
