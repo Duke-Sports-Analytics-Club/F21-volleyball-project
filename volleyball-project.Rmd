@@ -236,23 +236,6 @@ compiled_defense <- compiled_defense[, col_order]
 compiled_defense
 ```
 
-
-```{r linear model}
-ncaa_and_nitty <- left_join(nitty_gritties_full, NCAA_assists_per_set, 
-                             by = c("Team" = "team")) %>%
-  left_join(NCAA_aces_per_set, by = c("Team" = "team")) %>%
-  left_join(NCAA_blocks_per_set, by = c("Team" = "team")) %>%
-  left_join(NCAA_digs_per_set, by = c("Team" = "team")) %>%
-  left_join(NCAA_hitting_percentage, by = c("Team" = "team")) %>%
-  left_join(NCAA_kills_per_set, by = c("Team" = "team"))
-
-ncaa_and_nitty
-```
-
-rpi_lm <- linear_reg() %>%
-  set_engine("lm") %>%
-  fit(Adj. RPI Value ~ per_set, data = ncaa_and_nitty)
-
 ## Plotting hitting % vs. win %
 
 Section authored by Ethan Ouellette.
@@ -271,6 +254,22 @@ ggplot(data = hitting_pct_rpi, mapping = aes(x = pct, y = rpi)) +
   labs(title = paste("Hitting Percentage vs. Rating Percentage Index"))
 ```
 
+```{r linear model}
+ncaa_and_nitty <- left_join(nitty_gritties_full, NCAA_assists_per_set, 
+                             by = c("Team" = "team")) %>%
+  left_join(NCAA_aces_per_set, by = c("Team" = "team")) %>%
+  left_join(NCAA_blocks_per_set, by = c("Team" = "team")) %>%
+  left_join(NCAA_digs_per_set, by = c("Team" = "team")) %>%
+  left_join(NCAA_hitting_percentage, by = c("Team" = "team")) %>%
+  left_join(NCAA_kills_per_set, by = c("Team" = "team"))
+
+ncaa_and_nitty
+```
+
+rpi_lm <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(Adj. RPI Value ~ per_set, data = ncaa_and_nitty)
+  
 ## Correlation between Home/Away Games and Winning Percentage
 
 Section authored by Aditya Sardesai.
