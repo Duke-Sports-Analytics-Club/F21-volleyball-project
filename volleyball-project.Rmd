@@ -2,7 +2,7 @@
 title: "Duke Sports Analtyics: Volleyball Project (Fall 2021)"
 description: |
   Exploring Duke Women's Volleyball statistics
-author: Hillary Lee, Angel Chaudhary, Aditya Sardesai, Ethan Ouellette, Ashrit Verma
+author: Hillary Lee, Angel Chaudhary, Aditya Sardesai, Ethan Ouellette
 output: html_document
 ---
 
@@ -59,9 +59,9 @@ FIVB VIS (Volleyball Information System):
 library(tidyverse)
 ```
 
-The data is scraped from Duke Sport's website: https://goduke.com/sports/vb/stats/2021?path=vb.
-
 ## Duke Data
+
+The data is scraped from Duke Sport's website: https://goduke.com/sports/vb/stats/2021?path=vb.
 
 ```{r read-duke-data}
 url <- "https://goduke.com/sports/vb/stats/2021?path=vb"
@@ -98,6 +98,8 @@ Team_data_compiled
 
 ## NCAA Data
 
+The data is scraped from the NCAA website: https://www.ncaa.com/stats/volleyball-women/d1/
+
 ```{r read-ncaa-data}
 url <- "https://www.ncaa.com/stats/volleyball-women/d1/current/team/48"
 NCAA_aces_per_set <- xml2::read_html(url) %>% 
@@ -105,58 +107,93 @@ NCAA_aces_per_set <- xml2::read_html(url) %>%
   purrr::pluck(1) %>% 
   janitor::clean_names() %>% 
   dplyr::as_tibble() %>% 
-  rename(per_set = )
+  rename("aces per set" = per_set,
+         "sets" = s)
 
 url <- "https://www.ncaa.com/stats/volleyball-women/d1/current/team/49"
 NCAA_blocks_per_set <- xml2::read_html(url) %>% 
   rvest::html_table(fill = T) %>% 
   purrr::pluck(1) %>% 
   janitor::clean_names() %>% 
-  dplyr::as_tibble()
+  dplyr::as_tibble() %>% 
+  rename("blocks per set" = per_set,
+         "sets" = s)
 
 url <- "https://www.ncaa.com/stats/volleyball-women/d1/current/team/50"
 NCAA_digs_per_set <- xml2::read_html(url) %>% 
   rvest::html_table(fill = T) %>% 
   purrr::pluck(1) %>% 
   janitor::clean_names() %>% 
-  dplyr::as_tibble()
+  dplyr::as_tibble() %>% 
+  rename("digs per set" = per_set,
+         "sets" = s)
 
 url <- "https://www.ncaa.com/stats/volleyball-women/d1/current/team/47"
 NCAA_assists_per_set <- xml2::read_html(url) %>% 
   rvest::html_table(fill = T) %>% 
   purrr::pluck(1) %>% 
   janitor::clean_names() %>% 
-  dplyr::as_tibble()
+  dplyr::as_tibble() %>% 
+  rename("assists per set" = per_set,
+         "sets" = s)
 
 url <- "https://www.ncaa.com/stats/volleyball-women/d1/current/team/46"
 NCAA_kills_per_set <- xml2::read_html(url) %>% 
   rvest::html_table(fill = T) %>% 
   purrr::pluck(1) %>% 
   janitor::clean_names() %>% 
-  dplyr::as_tibble()
+  dplyr::as_tibble() %>% 
+  rename("kills per set" = per_set,
+         "sets" = s)
 
 url <- "https://www.ncaa.com/stats/volleyball-women/d1/current/team/45"
 NCAA_hitting_percentage <- xml2::read_html(url) %>% 
   rvest::html_table(fill = T) %>% 
   purrr::pluck(1) %>% 
   janitor::clean_names() %>% 
-  dplyr::as_tibble()
+  dplyr::as_tibble() %>% 
+  rename("sets" = s)
 
+NCAA_kills_per_set
+NCAA_hitting_percentage
 NCAA_aces_per_set
+
 NCAA_blocks_per_set
 NCAA_digs_per_set
 NCAA_assists_per_set
-NCAA_kills_per_set
-NCAA_hitting_percentage
 ```
+
+The following is a brief explanation of how the statistics were collected by 
+[NCAA regulations](http://fs.ncaa.org/Docs/stats/VB_Forms/Volleyball%20Box%20Score%20Form%20Instructions.pdf).
+
+*Offense*
+* Attack
+  + A kill is awarded any time an attack attempt is unreturnable by the opposition or any time the attack attempt leads directly to a blocking error by the opponent.
+  + Kills per set = total kills / sets
+  + Hitting percentage = (kills - errors) / Total attacks
+* Service Aces
+  + A service ace is a serve that directly results in a point.
+  + Aces per set = total team aces / sets
+
+*Defense*
+* Blocks
+  + Total team blocks are derived by adding all block solos to one half of the block assists.
+  + Blocks per set = total team blocks / sets
+* Digs
+  + A dig is awarded when a player successfully passes a ball that has been attacked by the opposition.
+  + Digs are given only when players receive an attacked ball and it is kept in play.
+  + Digs per set = total team digs / sets
+* Sets
+  + An assist is awarded when a player passes, sets or digs a ball to a teammate who attacks the ball for a kill.
+  + Assists per set = assists / sets
 
 ```{r nitty-gritty}
 library(readxl)
 nitty_gritties <- read_excel("data/nitty_gritties.xlsx")
 nitty_gritties
 
-full_nitty_gritties <- read_excel("data/NCAA_Statistics.xlsx")
-full_nitty_gritties
+nitty_gritties_full <- read_excel("data/NCAA_Statistics.xlsx")
+nitty_gritties_full
 ```
 
 This data shows the RPI (rating percentage index) data for the AAC conference, 
@@ -165,11 +202,64 @@ teams based upon a team's wins and losses and its strength of schedule.
 
 # Data Visualization
 
-# Plotting hitting % vs. win %
+## Offense and Defense stats
+
+Section authored by Hillary Lee.
+
+### Offense
+
+Service aces, kills, and hitting percentage are offensive stats that are compiled in this data.
+
+```{r offense}
+df1 <- NCAA_kills_per_set %>% select(-c(rank, sets))
+df2 <- NCAA_aces_per_set %>% select(-c(rank, sets))
+df3 <- NCAA_hitting_percentage %>% select(-c(rank, kills))
+
+compiled_offense <- df1 %>% inner_join(df2, by = "team") %>% inner_join(df3, by = "team")
+col_order <- c("team", "sets", "total_attacks", "kills", "errors", "aces", "kills per set", "pct", "aces per set")
+compiled_offense <- compiled_offense[, col_order]
+compiled_offense
+```
+
+### Defense
+
+Blocks, digs, and assists are defensive stats that are compiled in this data.
+
+```{r defense}
+df1 <- NCAA_blocks_per_set %>% select(-c(rank, sets))
+df2 <- NCAA_digs_per_set %>% select(-c(rank, sets))
+df3 <- NCAA_assists_per_set %>% select(-c(rank))
+
+compiled_defense <- df1 %>% inner_join(df2, by = "team") %>% inner_join(df3, by = "team")
+col_order <- c("team", "sets", "block_solos", "block_assists", "digs", "assists", "blocks per set", "digs per set",  "assists per set")
+compiled_defense <- compiled_defense[, col_order]
+compiled_defense
+```
+
+
+```{r linear model}
+ncaa_and_nitty <- left_join(nitty_gritties_full, NCAA_assists_per_set, 
+                             by = c("Team" = "team")) %>%
+  left_join(NCAA_aces_per_set, by = c("Team" = "team")) %>%
+  left_join(NCAA_blocks_per_set, by = c("Team" = "team")) %>%
+  left_join(NCAA_digs_per_set, by = c("Team" = "team")) %>%
+  left_join(NCAA_hitting_percentage, by = c("Team" = "team")) %>%
+  left_join(NCAA_kills_per_set, by = c("Team" = "team"))
+
+ncaa_and_nitty
+```
+
+rpi_lm <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(Adj. RPI Value ~ per_set, data = ncaa_and_nitty)
+
+## Plotting hitting % vs. win %
+
+Section authored by Ethan Ouellette.
 
 ```{r plot-1}
 
-lookup <- full_nitty_gritties[ ,c("Team", "Adj. RPI Value")]
+lookup <- nitty_gritties_full[ ,c("Team", "Adj. RPI Value")]
 hitting_pct <- NCAA_hitting_percentage[, c("team", "pct")]
 hitting_pct_rpi <- merge(lookup, hitting_pct, by.x="Team", by.y="team")
 names(hitting_pct_rpi)[2] <- "rpi"
@@ -181,44 +271,9 @@ ggplot(data = hitting_pct_rpi, mapping = aes(x = pct, y = rpi)) +
   labs(title = paste("Hitting Percentage vs. Rating Percentage Index"))
 ```
 
-# Offense and Defense stats
+## Correlation between Home/Away Games and Winning Percentage
 
-```{r offense}
-df1 <- NCAA_kills_per_set %>% select(-c(s, rank))
-
-NCAA_aces_per_set %>% 
-  inner_join(df1, by = "team") %>% 
-  rename("aces per set" = per_set.x,
-         "kills per set" = per_set.y)
-```
-
-Service aces, kills, and hitting percentage are offensive stats that are compiled.
-
-```{r defense}
-df2 <- NCAA_digs_per_set %>% select(-c(s, rank))
-
-NCAA_blocks_per_set %>% 
-  inner_join(df2, by = "team") %>% 
-  rename("blocks per set" = per_set.x,
-         "digs per set" = per_set.y)
-```
-
-Blocks and digs are defensive stats that are compiled.
-
-```{r linear model}
-ncaa_and_nitty <- left_join(full_nitty_gritties, NCAA_assists_per_set, 
-                             by = c("Team" = "team")) %>%
-  left_join(NCAA_aces_per_set, by = c("Team" = "team")) %>%
-  left_join(NCAA_blocks_per_set, by = c("Team" = "team")) %>%
-  left_join(NCAA_digs_per_set, by = c("Team" = "team")) %>%
-  left_join(NCAA_hitting_percentage, by = c("Team" = "team")) %>%
-  left_join(NCAA_kills_per_set, by = c("Team" = "team"))
-
-rpi_lm <- linear_reg() %>%
-  set_engine("lm") %>%
-  fit(Adj. RPI Value ~ per_set, data = ncaa_and_nitty)
-```
-
+Section authored by Aditya Sardesai.
 
 # Analysis
 
@@ -226,3 +281,4 @@ This section will be an analysis.
 
 # Summary
 
+This section will be a summary of the report.
